@@ -1,50 +1,64 @@
-var connection = require('connection');
+var connection = require('.../config/connection');
 
-function selectAll() {
-    // console.log("Selecting all of the products from the burgers_db");
-    var query = connection.query(
-        "SELECT * FROM burgers", function (err, res) {
-            if (err) throw err;
-            // console.log(res);
-            connection.end();
-        }
-    )
-    console.log(query.sql)
-};
+var orm = {
 
-function insertOne() {
-    // console.log("inserting a new burger \n")
-    var query = connection.query(
-        "INSERT INTO burgers SET ?", {
-            // need to connect query to what burger user is adding 
-            burger_name: "",
-            devoured: ""
-        }, function (err, res) {
-            if (err) throw err;
-            console.log("You have added...");
-        }
-    )
-    console.log(query.sql)
 
-};
+    selectAll: function (table, cb) {
+        // console.log("Selecting all of the products from the burgers_db");
+        var query = "SELECT * FROM " + table + ";";
 
-function updateOne(){
-    var query = connection.query(
-        "UPDATE burgers SET? WHERE?",
-        [
-            {
-                burger_name:""
-            },
-            {
-                devoured:""
+        connection.query(query,
+            function (err, res) {
+                if (err) {
+                    throw err;
+                    // console.log(res);
+                }
+                cb(res);
+            });
+        // console.log(query.sql)
+    },
+
+    insertOne: function (table, cols, bool, cb) {
+        // console.log("inserting a new burger \n")
+        var query = "INSERT INTO " + table + " (" + cols.tostring() + ") " + "VALUES (" + createQmarks(bool.length) + ") ";
+
+        console.log(query);
+
+        connection.query(query,
+            function (err, res) {
+                if (err) {
+                    throw err;
+                }
+                cb(res);
+            });
+        // console.log(query.sql)
+    },
+
+   updateOne:  function (table, objColBools, condition, cb) {
+        var query = "UPDATE " +table +  "SET " + translateSql(objColBools) + " WHERE "+ condition;
+
+        connection.query(query,
+            function (err, res) {
+                if (err) {
+                    throw err;
+                }
+                cb(res);
+            });
+    // console.log(query.sql)
+},
+
+deleteOne: function( table, condition, cb){
+    var query = "DELETE FROM " +table + "WHERE " +condition;
+
+    connection.query(query,
+        function (err, res) {
+            if (err) {
+                throw err;
             }
-        ],
-        function(err, res){
-            if(err)throw err;
-            console.log(res.affectedRows + "product updated\n")
-        }
-    )
-    console.log(query.sql)
-};
+            cb(res);
+        });
+}
+
+ }
 
 module.export = orm;
