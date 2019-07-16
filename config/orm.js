@@ -45,5 +45,6 @@ function updateOne(){
         }
     )
     console.log(query.sql)
-
 };
+
+module.export = orm;
