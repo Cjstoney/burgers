@@ -1,4 +1,4 @@
-var connection = require('.../config/connection');
+var connection = require('../config/connection');
 function createQmarks(num){
     var arr = [];
     for (let i = 0; i < array.length; i++) {
@@ -7,7 +7,7 @@ function createQmarks(num){
     return arr.toString();
 }
 
-function translateSql(obj){
+function translateSql(ob){
     var arr = [];
     for (var key in ob){
         var value = ob[key];
@@ -82,4 +82,4 @@ deleteOne: function( table, condition, cb){
 
  }
 
-module.export = orm;
+module.exports = orm;
